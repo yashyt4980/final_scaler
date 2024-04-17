@@ -1,17 +1,13 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { redisClient } = require("../client/redis_client");
-
-// Access your API key as an environment variable (see "Set up your API key" above)
 require("dotenv").config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 async function enrich(inp, email) {
-  // console.log(inp);
   const rateLimitFlag = await redisClient.get(`RATE_LIMIT:ENRICH_TEXT:${email}`);
   if (rateLimitFlag) {
     throw new Error("Please wait before enriching more text.");
   }
-
   const model = genAI.getGenerativeModel({ model: "gemini-pro" });
   const prompt = `You are tasked with developing a web application that extracts text from PDF files, enriches it, and displays the processed results in an interactive table format. The application should have a seamless user interface for file uploads and should utilize Next.js/React.js/Node.js stack.
   Here is the text to be processed:
