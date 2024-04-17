@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Document = require("./Document");
-
-mongoose.connect("mongodb://localhost/google-docs-clone", {
+require("dotenv").config()
+mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -13,9 +13,9 @@ mongoose.connect("mongodb://localhost/google-docs-clone", {
 });
 
 
-const io = require("socket.io")(5001, {
+const io = require("socket.io")(process.env.PORT, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_PORT,
     methods: ["GET", "POST"],
   },
 });
@@ -25,10 +25,7 @@ var defaultValue = "";
 io.on("connection", socket => {
   console.log("connected");
   socket.on("get-document", async ({documentId}) => {
-    // console.log(content);
     const document = await findOrCreateDocument(documentId);
-    // console.log(document);
-    // console.log(document.data);
     socket.join(documentId);
     socket.emit("load-document", document.data);
 
@@ -44,8 +41,6 @@ io.on("connection", socket => {
 
 async function findOrCreateDocument(id) {
   if (id == null) return;
-  // console.log(content);
-// 
   const document = await Document.findById(id);
   if (document) return document;
   return await Document.create({ _id: id, data: defaultValue });
