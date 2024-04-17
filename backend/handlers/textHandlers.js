@@ -2,6 +2,7 @@ const path = require("path");
 const { extractData } = require("../services/extractTextPdf");
 const { OCRPDF } = require("../services/ocr");
 const { enrich } = require("../services/textEnrich");
+const User = require('../models/User');
 
 const extractText = async (req, res) => {
   const url = req.body.url;
@@ -38,8 +39,10 @@ const extractText = async (req, res) => {
 
 const enrichText = async (req, res) => {
   const textInp = req.body.text;
+  // const email = req.body.user.email;
+  console.log(req.user.email);
   try {
-    const enrichedText = await enrich(textInp);
+    const enrichedText = await enrich(textInp,req.user.email);
     console.log("out", enrichedText);
     res.send({
       ok: true,
@@ -54,4 +57,7 @@ const enrichText = async (req, res) => {
     });
   }
 }
+
+
+
 module.exports = { extractText, enrichText };

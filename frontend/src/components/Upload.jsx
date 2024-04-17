@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Loader from "./Loader";
-import '../styles.css';
 
 function Upload() {
   const navigate = useNavigate();
@@ -121,30 +120,37 @@ function Upload() {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={{ 
+      maxWidth: '500px', 
+      margin: 'auto', 
+      padding: '20px', 
+      borderRadius: '5px', 
+      boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)', 
+      backgroundColor: '#f9f9f9', 
+      backgroundImage: 'linear-gradient(to right, #ff7e5f, #feb47b, #ffdea2, #ffffff)', 
+      animation: 'bg-animation 20s infinite alternate',
+      
+      
+    }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>TextXtend</h1>
       <form onSubmit={handleFormSubmit} encType="multipart/form-data">
-        <input type="file" onChange={handleFileChange} />
-        <button type="submit">Upload</button>
-        {text && <div className="text-container" ref={textRef}>{text}</div>}
-        
+        <input type="file" onChange={handleFileChange} style={{ marginBottom: '10px' }} />
+        <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', transition: 'background-color 0.3s, box-shadow 0.3s' }}>Upload</button>
+        {text && <div className="text-container" style={{ marginTop: '20px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>{text}</div>}
       </form>
       {text && (
-        <button className="action-button" onClick={enrichText}>
-          Enrich
-        </button>
+        <button className="action-button" style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', transition: 'background-color 0.3s' }} onClick={enrichText}>Enrich</button>
       )}
       {text && (
-        <button className="action-button" onClick={openEditor}>
-          Open in Editor
-        </button>
+        <button className="action-button" style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', transition: 'background-color 0.3s' }} onClick={openEditor}>Open in Editor</button>
       )}
       {loading && (
-        <div className="loader-container">
+        <div className="loader-container" style={{ marginTop: '20px', textAlign: 'center' }}>
           <Loader />
-          <div className="status">{status}</div>
+          <div className="status" style={{ marginTop: '10px' }}>{status}</div>
         </div>
       )}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {errorMessage && <p className="error-message" style={{ color: '#ff0000', marginTop: '10px' }}>{errorMessage}</p>}
     </div>
   );
 }

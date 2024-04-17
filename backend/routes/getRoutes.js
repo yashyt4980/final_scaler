@@ -7,4 +7,5 @@ router.route('/getUrl').post(protect, getUrl);
 router.route('/getFileUrl').post(protect,getFileUrl);
 router.route('/extract').post(protect, extractText);
 router.route('/enrich').post(protect, enrichText);
+// router.route('/saveDb').post(protect, uploadDb);
 module.exports = router ;

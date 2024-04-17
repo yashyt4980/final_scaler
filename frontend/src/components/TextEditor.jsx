@@ -3,7 +3,7 @@ import "quill/dist/quill.snow.css";
 import Quill from "quill";
 import { io } from "socket.io-client";
 import { useParams } from "react-router";
-
+import axios from 'axios';
 const SAVE_INTERVAL_MS = 1000
 
 const TOOLBAR_OPTIONS = [
@@ -22,6 +22,19 @@ export default function TextEditor() {
  const{id:documentId}=useParams();
  const [socket, setSocket] = useState()
  const [quill, setQuill] = useState()
+  // useEffect(() => {
+  //   async function saveDb() {
+  //     const data = await axios.post("http://localhost:5000/user/saveDb", {
+  //       id,
+  //     }, 
+  //   {
+  //     headers: {
+  //       Authorization: "Bearer " + localStorage.getItem("user__token"),
+  //     },
+  //   });
+  //   };
+  //   saveDb();
+  // })
 
  useEffect(() => {
    const s=io("http://localhost:5001")
@@ -98,7 +111,7 @@ useEffect(() => {
     modules: { toolbar: TOOLBAR_OPTIONS }
   })
   q.disable()
-  q.setText("systuum");
+  q.setText("Loading...");
   setQuill(q);
 
 }, [])
