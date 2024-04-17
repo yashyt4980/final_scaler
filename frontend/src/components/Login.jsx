@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import '../styles.css'
+import "../styles.css";
 import toast from "react-hot-toast";
 
 const Login = () => {
@@ -13,7 +13,7 @@ const Login = () => {
     event.preventDefault();
 
     axios
-      .post("http://localhost:5000/user/login", { email, password })
+      .post(`${import.meta.env.VITE_SERVER}user/login`, { email, password })
       .then((result) => {
         console.log(result);
         if (result.data.token) {
@@ -37,7 +37,9 @@ const Login = () => {
         <h2 className="login-heading">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email"><b>Email</b></label>
+            <label htmlFor="email">
+              <b>Email</b>
+            </label>
             <input
               type="email"
               className="form-control"
@@ -49,7 +51,9 @@ const Login = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label" htmlFor="password"><b>Password</b></label>
+            <label className="form-label" htmlFor="password">
+              <b>Password</b>
+            </label>
             <input
               type="password"
               className="form-control"

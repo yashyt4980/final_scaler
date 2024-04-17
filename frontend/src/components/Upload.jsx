@@ -12,7 +12,7 @@ function Upload() {
   const [filename, setFilename] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [text, setText] = useState("");
-  
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
@@ -31,7 +31,7 @@ function Upload() {
         setLoading(true);
         setStatus("Uploading Document");
         const { data } = await axios.post(
-          "http://localhost:5000/api/getUrl",
+          `${import.meta.env.VITE_SERVER}api/getUrl`,
           {
             filename,
           },
@@ -57,7 +57,7 @@ function Upload() {
           const {
             data: { url },
           } = await axios.post(
-            "http://localhost:5000/api/getFileUrl",
+            `${import.meta.env.VITE_SERVER}api/getFileUrl`,
             {
               key: filename,
             },
@@ -71,14 +71,15 @@ function Upload() {
             const {
               data: { data },
             } = await axios.post(
-              "http://localhost:5000/api/extract",
+              `${import.meta.env.VITE_SERVER}api/extract`,
               {
                 url,
                 filename: filename,
               },
               {
                 headers: {
-                  Authorization: "Bearer " + localStorage.getItem("user__token"),
+                  Authorization:
+                    "Bearer " + localStorage.getItem("user__token"),
                 },
               }
             );
@@ -103,8 +104,10 @@ function Upload() {
   const enrichText = async () => {
     setLoading(true);
     setStatus("Enriching Text");
-    const { data: { enrichedText } } = await axios.post(
-      "http://localhost:5000/api/enrich",
+    const {
+      data: { enrichedText },
+    } = await axios.post(
+      `${import.meta.env.VITE_SERVER}api/enrich`,
       {
         text: text,
       },
@@ -120,37 +123,110 @@ function Upload() {
   };
 
   return (
-    <div className="container" style={{ 
-      maxWidth: '500px', 
-      margin: 'auto', 
-      padding: '20px', 
-      borderRadius: '5px', 
-      boxShadow: '0 0 20px rgba(0, 0, 0, 0.1)', 
-      backgroundColor: '#f9f9f9', 
-      backgroundImage: 'linear-gradient(to right, #ff7e5f, #feb47b, #ffdea2, #ffffff)', 
-      animation: 'bg-animation 20s infinite alternate',
-      
-      
-    }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>TextXtend</h1>
+    <div
+      className="container"
+      style={{
+        maxWidth: "500px",
+        margin: "auto",
+        padding: "20px",
+        borderRadius: "5px",
+        boxShadow: "0 0 20px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "#f9f9f9",
+        backgroundImage:
+          "linear-gradient(to right, #ff7e5f, #feb47b, #ffdea2, #ffffff)",
+        animation: "bg-animation 20s infinite alternate",
+      }}
+    >
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>TextXtend</h1>
       <form onSubmit={handleFormSubmit} encType="multipart/form-data">
-        <input type="file" onChange={handleFileChange} style={{ marginBottom: '10px' }} />
-        <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', transition: 'background-color 0.3s, box-shadow 0.3s' }}>Upload</button>
-        {text && <div className="text-container" style={{ marginTop: '20px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>{text}</div>}
+        <input
+          type="file"
+          onChange={handleFileChange}
+          style={{ marginBottom: "10px" }}
+        />
+        <button
+          type="submit"
+          style={{
+            padding: "10px 20px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            transition: "background-color 0.3s, box-shadow 0.3s",
+          }}
+        >
+          Upload
+        </button>
+        {text && (
+          <div
+            className="text-container"
+            style={{
+              marginTop: "20px",
+              padding: "10px",
+              border: "1px solid #ddd",
+              borderRadius: "5px",
+            }}
+          >
+            {text}
+          </div>
+        )}
       </form>
       {text && (
-        <button className="action-button" style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', transition: 'background-color 0.3s' }} onClick={enrichText}>Enrich</button>
+        <button
+          className="action-button"
+          style={{
+            marginTop: "10px",
+            padding: "10px 20px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            transition: "background-color 0.3s",
+          }}
+          onClick={enrichText}
+        >
+          Enrich
+        </button>
       )}
       {text && (
-        <button className="action-button" style={{ marginTop: '10px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', transition: 'background-color 0.3s' }} onClick={openEditor}>Open in Editor</button>
+        <button
+          className="action-button"
+          style={{
+            marginTop: "10px",
+            padding: "10px 20px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            transition: "background-color 0.3s",
+          }}
+          onClick={openEditor}
+        >
+          Open in Editor
+        </button>
       )}
       {loading && (
-        <div className="loader-container" style={{ marginTop: '20px', textAlign: 'center' }}>
+        <div
+          className="loader-container"
+          style={{ marginTop: "20px", textAlign: "center" }}
+        >
           <Loader />
-          <div className="status" style={{ marginTop: '10px' }}>{status}</div>
+          <div className="status" style={{ marginTop: "10px" }}>
+            {status}
+          </div>
         </div>
       )}
-      {errorMessage && <p className="error-message" style={{ color: '#ff0000', marginTop: '10px' }}>{errorMessage}</p>}
+      {errorMessage && (
+        <p
+          className="error-message"
+          style={{ color: "#ff0000", marginTop: "10px" }}
+        >
+          {errorMessage}
+        </p>
+      )}
     </div>
   );
 }

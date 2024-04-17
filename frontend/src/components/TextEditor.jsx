@@ -37,7 +37,7 @@ export default function TextEditor() {
   // })
 
  useEffect(() => {
-   const s=io("http://localhost:5001")
+   const s=io(`${import.meta.env.VITE_SOCKET}`)
    setSocket(s);
    return () => {
      s.disconnect();
